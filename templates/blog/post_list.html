@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}{% if is_search %}جستجو{% else %}مقالات{% endif %} — {{ SITE_NAME }}{% endblock %}
+{% block content %}
+<div class="blog-list-page">
+    <div class="page-heading">
+        <span><svg class="icon"><use href="#i-newspaper"/></svg> مقالات</span>
+        <h1>{% if query %}نتایج جستجو برای "{{ query }}"{% elif current_cat %}مقالات دسته‌بندی{% else %}همه مقالات{% endif %}</h1>
+        <p>{{ page_obj.paginator.count }} مقاله یافت شد.</p>
+    </div>
+
+    <form method="get" class="blog-list-toolbar">
+        <div class="search-box">
+            <svg class="icon"><use href="#i-search"/></svg>
+            <input type="text" name="q" value="{{ query }}" placeholder="جستجو...">
+        </div>
+        <select name="cat" onchange="this.form.submit()" style="padding:12px;border-radius:10px;border:1px solid #d1d5db;font-family:inherit;">
+            <option value="">همه دسته‌ها</option>
+            {% for c in categories %}
+            <option value="{{ c.slug }}" {% if c.slug == current_cat %}selected{% endif %}>{{ c.name }}</option>
+            {% endfor %}
+        </select>
+        <select name="sort" onchange="this.form.submit()" style="padding:12px;border-radius:10px;border:1px solid #d1d5db;font-family:inherit;">
+            <option value="new" {% if current_sort == "new" %}selected{% endif %}>جدیدترین</option>
+            <option value="old" {% if current_sort == "old" %}selected{% endif %}>قدیمی‌ترین</option>
+        </select>
+        <button type="submit" class="primary-btn">جستجو</button>
+    </form>
+
+    <div class="blog-list-grid">
+        {% for post in page_obj %}
+        <article class="blog-list-card">
+            <div class="blog-thumbnail">
+                {% if post.cover %}<img src="{{ post.cover.url }}" alt="{{ post.title }}">{% else %}<svg class="icon icon-2xl"><use href="#i-newspaper"/></svg>{% endif %}
+                {% if post.category %}<span>{{ post.category.name }}</span>{% endif %}
+            </div>
+            <div class="blog-list-content">
+                <div class="blog-list-meta">{{ post.author.profile.name|default:post.author.username }} — {{ post.published_at|date:"Y/m/d" }}</div>
+                <h2>{{ post.title }}</h2>
+                <p>{{ post.summary|default:post.content|truncatechars:100 }}</p>
+                <a href="{{ post.get_absolute_url }}" class="read-more">ادامه مطلب <svg class="icon"><use href="#i-arrow-left"/></svg></a>
+            </div>
+        </article>
+        {% empty %}
+        <div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:#6b7280;">
+            <svg class="icon icon-2xl" style="display:block;margin:0 auto 15px;"><use href="#i-frown"/></svg>
+            <p>مقاله‌ای یافت نشد.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if page_obj.paginator.num_pages > 1 %}
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if current_cat %}&cat={{ current_cat }}{% endif %}{% if current_sort %}&sort={{ current_sort }}{% endif %}">قبلی</a>
+        {% endif %}
+        {% for num in page_obj.paginator.page_range %}
+            {% if num == page_obj.number %}<span class="current">{{ num }}</span>
+            {% elif num > page_obj.number|add:-3 and num < page_obj.number|add:3 %}
+            <a href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}{% if current_cat %}&cat={{ current_cat }}{% endif %}{% if current_sort %}&sort={{ current_sort }}{% endif %}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if current_cat %}&cat={{ current_cat }}{% endif %}{% if current_sort %}&sort={{ current_sort }}{% endif %}">بعدی</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,117 @@
+<footer class="site-footer">
+    <div class="footer-container">
+
+        <!-- معرفی سایت -->
+        <div class="footer-column">
+            <h3>
+                <svg class="icon">
+                    <use href="#i-feather"/>
+                </svg>
+                {{ SITE_NAME }}
+            </h3>
+            <p>{{ SITE_TAGLINE }} — جایی برای اشتراک دانش و تجربه.</p>
+        </div>
+
+        <!-- لینک‌های سریع -->
+        <div class="footer-column">
+            <h3>لینک‌های سریع</h3>
+            <ul>
+                <li>
+                    <a href="{% url 'blog:home' %}">خانه</a>
+                </li>
+                <li>
+                    <a href="{% url 'blog:post_list' %}">مقالات</a>
+                </li>
+                <li>
+                    <a href="{% url 'blog:search' %}">جستجو</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- دسته‌بندی‌ها -->
+        <div class="footer-column">
+            <h3>دسته‌بندی‌ها</h3>
+            <ul>
+                {% for cat in nav_categories %}
+                    <li>
+                        <a href="{{ cat.get_absolute_url }}">
+                            {{ cat.name }}
+                        </a>
+                    </li>
+                {% empty %}
+                    <li>
+                        <a href="#">دسته‌ای ثبت نشده</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- شبکه‌های اجتماعی -->
+        <div class="footer-column">
+            <h3>شبکه‌های اجتماعی</h3>
+
+            <div class="footer-social">
+
+                <!-- Telegram -->
+                <a href="https://t.me/araipi"
+                   title="تلگرام"
+                   aria-label="تلگرام"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                    <svg class="icon icon--filled">
+                        <use href="#i-telegram"/>
+                    </svg>
+                </a>
+
+                <!-- GitHub -->
+                <a href="https://github.com/ByteBite1391"
+                   title="گیت‌هاب"
+                   aria-label="گیت‌هاب"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                    <svg class="icon icon--filled">
+                        <use href="#i-github"/>
+                    </svg>
+                </a>
+
+                <!-- Portfolio -->
+                <a href="https://bytebite1391.github.io/Portfolio/"
+                   title="Portfolio"
+                   aria-label="Portfolio"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                    <svg class="icon">
+                        <use href="#i-globe"/>
+                    </svg>
+                </a>
+
+                <!-- Email -->
+                <a href="mailto:amiralipourbabaeii1391@gmail.com"
+                   title="ایمیل"
+                   aria-label="ایمیل">
+                    <svg class="icon">
+                        <use href="#i-envelope"/>
+                    </svg>
+                </a>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer Bottom -->
+    <div class="footer-bottom">
+    <p>
+        © {% now "Y" %} {{ SITE_NAME }} — تمامی حقوق محفوظ است.
+    </p>
+
+    <p>
+        ساخته‌شده توسط
+        <a href="https://bytebite1391.github.io/Portfolio/"
+           target="_blank"
+           rel="noopener noreferrer">
+            امیرعلی پوربابائی
+        </a>
+    </p>
+</div>
+</footer>

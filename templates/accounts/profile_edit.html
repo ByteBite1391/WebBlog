@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}ویرایش پروفایل — {{ SITE_NAME }}{% endblock %}
+{% block content %}
+<div class="blog-form-page">
+    <div class="blog-form-card">
+        <div class="form-heading">
+            <div class="form-icon"><svg class="icon"><use href="#i-user-pen"/></svg></div>
+            <h1>ویرایش پروفایل</h1>
+            <p>اطلاعات و تصویر نمایه خود را به‌روزرسانی کنید.</p>
+        </div>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% if form.instance.avatar %}
+            <div style="text-align:center;margin-bottom:15px;">
+                <div class="avatar avatar-lg" style="margin:auto;">
+                    <img src="{{ form.instance.avatar.url }}" alt="">
+                </div>
+            </div>
+            {% endif %}
+            {% for field in form %}
+            <div class="form-group">
+                <label>{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}<small style="color:#9ca3af;">{{ field.help_text }}</small>{% endif %}
+                {% if field.errors %}<ul class="errorlist">{% for e in field.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+            </div>
+            {% endfor %}
+            <div class="form-actions">
+                <a href="{% url 'blog:dashboard' %}" class="secondary-btn">انصراف</a>
+                <button type="submit" class="primary-btn"><svg class="icon"><use href="#i-check"/></svg> ذخیره</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

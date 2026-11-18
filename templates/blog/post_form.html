@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}{% if mode == "create" %}مقاله جدید{% else %}ویرایش مقاله{% endif %} — {{ SITE_NAME }}{% endblock %}
+{% block content %}
+<div class="blog-form-page">
+    <div class="blog-form-card">
+        <div class="form-heading">
+            <div class="form-icon"><svg class="icon"><use href="#i-pen-fancy"/></svg></div>
+            <h1>{% if mode == "create" %}مقاله جدید{% else %}ویرایش مقاله{% endif %}</h1>
+        </div>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group">
+                <label>{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}<ul class="errorlist">{% for e in field.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+            </div>
+            {% endfor %}
+            <div class="form-actions">
+                <a href="{% url 'blog:dashboard' %}" class="secondary-btn">انصراف</a>
+                <button type="submit" class="primary-btn"><svg class="icon"><use href="#i-check"/></svg> ذخیره</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

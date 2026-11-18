@@ -1,0 +1,27 @@
+<nav>
+    <div class="right">
+        <a href="{% url 'blog:home' %}" title="خانه" aria-label="خانه"><svg class="icon"><use href="#i-house"/></svg></a>
+        <a href="{% url 'blog:post_list' %}" title="مقالات" aria-label="مقالات"><svg class="icon"><use href="#i-newspaper"/></svg></a>
+        <a href="{% url 'blog:search' %}" title="جستجو" aria-label="جستجو"><svg class="icon"><use href="#i-search"/></svg></a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'blog:dashboard' %}" title="پنل من" aria-label="پنل من"><svg class="icon"><use href="#i-gauge"/></svg></a>
+        {% endif %}
+    </div>
+    <div class="left">
+        {% if user.is_authenticated %}
+            <button><a href="{% url 'blog:post_create' %}">مقاله جدید</a></button>
+            <button><a href="{% url 'blog:dashboard' %}">
+                {% if user.profile.avatar %}
+                    <img src="{{ user.profile.avatar.url }}" alt="" class="avatar" style="width:22px;height:22px;">
+                {% else %}
+                    <svg class="icon"><use href="#i-user"/></svg>
+                {% endif %}
+                {{ user.profile.name }}
+            </a></button>
+            <button><a href="{% url 'accounts:logout' %}">خروج</a></button>
+        {% else %}
+            <button><a href="{% url 'accounts:login' %}">ورود</a></button>
+            <button><a href="{% url 'accounts:register' %}">ثبت‌نام</a></button>
+        {% endif %}
+    </div>
+</nav>

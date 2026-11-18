@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}{{ post.title }} — {{ SITE_NAME }}{% endblock %}
+{% block content %}
+<div class="detail-blog-page">
+    <article class="blog-detail">
+        {% if post.category %}<span class="detail-category">{{ post.category.name }}</span>{% endif %}
+        <h1>{{ post.title }}</h1>
+        <div class="detail-meta">
+            <span><svg class="icon"><use href="#i-user"/></svg> {{ post.author.profile.name|default:post.author.username }}</span>
+            <span><svg class="icon"><use href="#i-calendar"/></svg> {{ post.published_at|date:"Y/m/d" }}</span>
+            <span><svg class="icon"><use href="#i-eye"/></svg> {{ post.views }} بازدید</span>
+        </div>
+        {% if post.cover %}
+            <div class="detail-cover"><img src="{{ post.cover.url }}" alt="{{ post.title }}"></div>
+        {% else %}
+            <div class="detail-cover"><svg class="icon icon-2xl"><use href="#i-newspaper"/></svg></div>
+        {% endif %}
+        <div class="detail-content">
+            {% if post.summary %}<p><strong>{{ post.summary }}</strong></p>{% endif %}
+            {{ post.content|linebreaks }}
+        </div>
+        {% if user == post.author %}
+        <div class="detail-actions">
+            <a href="{% url 'blog:post_update' post.slug %}" class="secondary-btn"><svg class="icon"><use href="#i-pen"/></svg> ویرایش</a>
+            <a href="{% url 'blog:post_delete' post.slug %}" class="danger-btn"><svg class="icon"><use href="#i-trash"/></svg> حذف</a>
+        </div>
+        {% endif %}
+    </article>
+
+    <section class="comments-section">
+        <h2>نظرات ({{ comments|length }})</h2>
+        {% if comments %}
+        <ul class="comment-list">
+            {% for c in comments %}
+            <li class="comment-item">
+                <div class="comment-meta">
+                    <strong>{{ c.author.profile.name|default:c.author.username }}</strong>
+                    <span>{{ c.created_at|date:"Y/m/d H:i" }}</span>
+                </div>
+                <div class="comment-body">{{ c.body|linebreaksbr }}</div>
+                {% if user == c.author or user.is_staff %}
+                <form method="post" action="{% url 'blog:delete_comment' c.pk %}" style="margin-top:8px;">
+                    {% csrf_token %}
+                    <button type="submit" class="danger-btn" style="font-size:11px;padding:5px 10px;">حذف</button>
+                </form>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p style="color:#6b7280;margin-bottom:20px;">هنوز نظری ثبت نشده است.</p>
+        {% endif %}
+
+        {% if user.is_authenticated %}
+        <form method="post" action="{% url 'blog:add_comment' post.slug %}" class="comment-form">
+            {% csrf_token %}
+            {{ comment_form.body }}
+            <button type="submit" class="primary-btn" style="margin-top:10px;"><svg class="icon"><use href="#i-comment"/></svg> ارسال نظر</button>
+        </form>
+        {% else %}
+        <p><a href="{% url 'accounts:login' %}?next={{ request.path }}">برای ثبت نظر وارد شوید</a>.</p>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}پروفایل — {{ SITE_NAME }}{% endblock %}
+{% block content %}
+<div class="login-page">
+    <div class="login-card" style="max-width:520px;">
+        <div class="login-header">
+            <div class="avatar avatar-lg" style="margin:0 auto 15px;">
+                {% if profile.avatar %}
+                    <img src="{{ profile.avatar.url }}" alt="">
+                {% else %}
+                    <svg class="icon" style="width:50px;height:50px;"><use href="#i-user"/></svg>
+                {% endif %}
+            </div>
+            <h1>{{ profile.name }}</h1>
+            <p>@{{ user.username }}</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+            {% if user.email %}<p><svg class="icon"><use href="#i-envelope"/></svg> {{ user.email }}</p>{% endif %}
+            {% if profile.bio %}<p>{{ profile.bio }}</p>{% endif %}
+            {% if profile.website %}<p><svg class="icon"><use href="#i-globe"/></svg> <a href="{{ profile.website }}">{{ profile.website }}</a></p>{% endif %}
+        </div>
+        <div style="display:flex;gap:10px;margin-top:25px;flex-wrap:wrap;">
+            <a href="{% url 'accounts:profile_edit' %}" class="primary-btn">ویرایش پروفایل</a>
+            <a href="{% url 'blog:dashboard' %}" class="secondary-btn">داشبورد</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}۵۰۰ — {{ SITE_NAME }}{% endblock %}
+{% block content %}
+<div class="delete-page"><div class="delete-card">
+    <div class="delete-icon"><svg class="icon"><use href="#i-bug"/></svg></div>
+    <h1>۵۰۰ — خطای سرور</h1>
+    <p>مشکلی پیش آمد. بعداً تلاش کنید.</p>
+    <div class="delete-actions"><a href="{% url 'blog:home' %}" class="primary-btn">بازگشت به خانه</a></div>
+</div></div>
+{% endblock %}

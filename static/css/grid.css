@@ -1,0 +1,25 @@
+:root{--container-padding:1rem;--space-1:.25rem;--space-2:.5rem;--space-3:.75rem;--space-4:1rem;--space-6:1.5rem;--space-8:2rem;--layout-radius-md:.625rem;--layout-radius-lg:1rem}
+*,*::before,*::after{box-sizing:border-box}
+html,body{width:100%;max-width:100%;overflow-x:hidden;margin:0}
+img,svg,video,canvas,iframe{max-width:100%}
+.container,.container-fluid{width:100%;margin-inline:auto;padding-inline:var(--container-padding)}
+.container{max-width:1140px}
+.row{--row-gutter-x:1.5rem;--row-gutter-y:1.5rem;display:flex;flex-wrap:wrap;margin-inline:calc(var(--row-gutter-x) * -0.5);margin-block-start:calc(var(--row-gutter-y) * -0.5)}
+.row>*{width:100%;max-width:100%;padding-inline:calc(var(--row-gutter-x) * 0.5);padding-block-start:calc(var(--row-gutter-y) * 0.5)}
+.d-flex{display:flex!important}.d-none{display:none!important}.d-block{display:block!important}.d-grid{display:grid!important}
+.flex-column{flex-direction:column!important}.flex-wrap{flex-wrap:wrap!important}
+.justify-between{justify-content:space-between!important}.justify-center{justify-content:center!important}
+.align-center{align-items:center!important}
+.gap-1{gap:var(--space-1)!important}.gap-2{gap:var(--space-2)!important}.gap-3{gap:var(--space-3)!important}.gap-4{gap:var(--space-4)!important}.gap-6{gap:var(--space-6)!important}
+.grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.grid-4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.text-center{text-align:center!important}.text-start{text-align:start!important}.text-end{text-align:end!important}
+.w-100{width:100%!important}.mx-auto{margin-inline:auto!important}
+.mt-2{margin-top:var(--space-2)!important}.mt-4{margin-top:var(--space-4)!important}.mt-6{margin-top:var(--space-6)!important}
+.mb-2{margin-bottom:var(--space-2)!important}.mb-4{margin-bottom:var(--space-4)!important}.mb-6{margin-bottom:var(--space-6)!important}
+.p-4{padding:var(--space-4)!important}.p-6{padding:var(--space-6)!important}
+.rounded{border-radius:var(--layout-radius-md)!important}.rounded-lg{border-radius:var(--layout-radius-lg)!important}.rounded-full{border-radius:9999px!important}
+.cards-grid{display:grid;grid-template-columns:repeat(1,minmax(0,1fr));gap:1.5rem}
+@media(min-width:576px){.cards-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:992px){.cards-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}

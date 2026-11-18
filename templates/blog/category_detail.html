@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}{{ category.name }} — {{ SITE_NAME }}{% endblock %}
+{% block content %}
+<div class="blog-list-page">
+    <div class="page-heading">
+        <span><svg class="icon"><use href="#i-folder-open"/></svg> دسته‌بندی</span>
+        <h1>{{ category.name }}</h1>
+        {% if category.description %}<p>{{ category.description }}</p>{% endif %}
+    </div>
+    <div class="blog-list-grid">
+        {% for post in page_obj %}
+        <article class="blog-list-card">
+            <div class="blog-thumbnail">
+                {% if post.cover %}<img src="{{ post.cover.url }}" alt="{{ post.title }}">{% else %}<svg class="icon icon-2xl"><use href="#i-newspaper"/></svg>{% endif %}
+            </div>
+            <div class="blog-list-content">
+                <div class="blog-list-meta">{{ post.author.profile.name|default:post.author.username }} — {{ post.published_at|date:"Y/m/d" }}</div>
+                <h2>{{ post.title }}</h2>
+                <p>{{ post.summary|default:post.content|truncatechars:100 }}</p>
+                <a href="{{ post.get_absolute_url }}" class="read-more">ادامه مطلب <svg class="icon"><use href="#i-arrow-left"/></svg></a>
+            </div>
+        </article>
+        {% empty %}
+        <p>در این دسته مقاله‌ای نیست.</p>
+        {% endfor %}
+    </div>
+    {% if page_obj.paginator.num_pages > 1 %}
+    <div class="pagination">
+        {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}">قبلی</a>{% endif %}
+        {% for num in page_obj.paginator.page_range %}
+            {% if num == page_obj.number %}<span class="current">{{ num }}</span>{% else %}<a href="?page={{ num }}">{{ num }}</a>{% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}">بعدی</a>{% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

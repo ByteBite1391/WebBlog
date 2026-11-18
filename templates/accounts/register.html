@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}ثبت‌نام — {{ SITE_NAME }}{% endblock %}
+{% block content %}
+<div class="register-page">
+    <div class="register-card">
+        <div class="register-header">
+            <div class="register-icon"><svg class="icon"><use href="#i-user-plus"/></svg></div>
+            <h1>ایجاد حساب جدید</h1>
+        </div>
+        <form method="post" class="register-form">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group">
+                <label>{{ field.label }}</label>
+                <div class="input-wrapper">
+                    <svg class="icon"><use href="#i-user"/></svg>
+                    {{ field }}
+                </div>
+                {% if field.errors %}<ul class="errorlist">{% for e in field.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+            </div>
+            {% endfor %}
+            <button type="submit" class="register-btn"><svg class="icon"><use href="#i-user-plus"/></svg> ثبت‌نام</button>
+        </form>
+        <div class="register-footer">قبلاً ثبت‌نام کرده‌اید؟ <a href="{% url 'accounts:login' %}">ورود</a></div>
+    </div>
+</div>
+{% endblock %}

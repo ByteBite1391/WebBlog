@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}داشبورد — {{ SITE_NAME }}{% endblock %}
+{% block content %}
+<div class="dashboard">
+    <div class="profile-card" style="margin-bottom:25px;">
+        <div class="profile-head">
+            <div class="avatar avatar-lg">
+                {% if user.profile.avatar %}
+                    <img src="{{ user.profile.avatar.url }}" alt="{{ user.profile.name }}">
+                {% else %}
+                    <svg class="icon" style="width:50px;height:50px;"><use href="#i-user"/></svg>
+                {% endif %}
+            </div>
+            <div class="profile-info">
+                <h2>{{ user.profile.name }}</h2>
+                <p class="username">@{{ user.username }}</p>
+                {% if user.email %}<p><svg class="icon"><use href="#i-envelope"/></svg> {{ user.email }}</p>{% endif %}
+                {% if user.profile.website %}<p><svg class="icon"><use href="#i-globe"/></svg> <a href="{{ user.profile.website }}">{{ user.profile.website }}</a></p>{% endif %}
+                {% if user.profile.bio %}<p style="margin-top:6px;">{{ user.profile.bio }}</p>{% endif %}
+            </div>
+        </div>
+        <div class="dash-tabs">
+            <a href="{% url 'accounts:profile_edit' %}"><svg class="icon"><use href="#i-user-pen"/></svg> ویرایش پروفایل</a>
+            <a href="{% url 'accounts:change_password' %}"><svg class="icon"><use href="#i-key"/></svg> تغییر رمز</a>
+            <a href="{% url 'blog:post_create' %}"><svg class="icon"><use href="#i-plus"/></svg> مقاله جدید</a>
+        </div>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon"><svg class="icon"><use href="#i-file-lines"/></svg></div>
+            <div class="num">{{ total }}</div>
+            <div class="label">کل مقالات</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><svg class="icon"><use href="#i-check-circle"/></svg></div>
+            <div class="num">{{ published }}</div>
+            <div class="label">منتشرشده</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><svg class="icon"><use href="#i-pen"/></svg></div>
+            <div class="num">{{ drafts }}</div>
+            <div class="label">پیش‌نویس</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><svg class="icon"><use href="#i-comment"/></svg></div>
+            <div class="num">{{ comments_count }}</div>
+            <div class="label">نظرات</div>
+        </div>
+    </div>
+
+    <h2 style="margin-bottom:18px;color:#111827;">مقالات من</h2>
+    <div class="blog-list-grid">
+        {% for post in posts %}
+        <article class="blog-list-card">
+            <div class="blog-thumbnail">
+                {% if post.cover %}<img src="{{ post.cover.url }}" alt="{{ post.title }}">{% else %}<svg class="icon icon-2xl"><use href="#i-newspaper"/></svg>{% endif %}
+                {% if post.category %}<span>{{ post.category.name }}</span>{% endif %}
+            </div>
+            <div class="blog-list-content">
+                <div class="blog-list-meta">
+                    {{ post.created_at|date:"Y/m/d" }} —
+                    {% if post.status == "published" %}<strong style="color:#059669;">منتشرشده</strong>
+                    {% else %}<strong style="color:#d97706;">پیش‌نویس</strong>{% endif %}
+                </div>
+                <h2>{{ post.title }}</h2>
+                <p>{{ post.summary|default:post.content|truncatechars:90 }}</p>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                    <a href="{{ post.get_absolute_url }}" class="secondary-btn" style="font-size:11px;padding:6px 10px;">مشاهده</a>
+                    <a href="{% url 'blog:post_update' post.slug %}" class="secondary-btn" style="font-size:11px;padding:6px 10px;">ویرایش</a>
+                    <a href="{% url 'blog:post_delete' post.slug %}" class="danger-btn" style="font-size:11px;padding:6px 10px;">حذف</a>
+                </div>
+            </div>
+        </article>
+        {% empty %}
+        <div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:#6b7280;">
+            <svg class="icon icon-2xl" style="display:block;margin:0 auto 15px;"><use href="#i-newspaper"/></svg>
+            <p>هنوز مقاله‌ای نساخته‌اید.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if my_comments %}
+    <h2 style="margin:35px 0 18px;color:#111827;">نظرات روی مقالات من</h2>
+    <div class="profile-card">
+        <ul class="comment-list" style="margin:0;">
+            {% for c in my_comments %}
+            <li class="comment-item">
+                <div class="comment-meta">
+                    <strong>{{ c.author.profile.name|default:c.author.username }}</strong>
+                    <span>روی: <a href="{{ c.post.get_absolute_url }}">{{ c.post.title }}</a> — {{ c.created_at|date:"Y/m/d H:i" }}</span>
+                </div>
+                <div class="comment-body">{{ c.body|linebreaksbr }}</div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
